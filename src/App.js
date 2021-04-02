@@ -19,7 +19,7 @@ export default class App extends Component {
     isLoading: false,
     error: null,
     showModal: false,
-    largeImageURL: '',
+    modalImage: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -60,7 +60,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, isLoading, error, showModal, largeImageURL } = this.state;
+    const { images, isLoading, error, showModal, modalImage } = this.state;
     const shouldLoadMoreBtnRender = images.length > 0 && !isLoading;
     return (
       <div>
@@ -74,18 +74,21 @@ export default class App extends Component {
             <ImageGalleryItem
               key={image.id}
               onShowImage={this.toggleModal}
-              // largeImageURL={image.largeImageURL}
               webformatURL={image.webformatURL}
-              onClick={image.largeImageURL}
+              onClick={this.handleOpenModal}
             />
-          ))}{' '}
+          ))}
         </ImageGallery>
 
         {isLoading && <h2> Loading images...</h2>}
 
         {shouldLoadMoreBtnRender && <Button onFetch={this.fetchImages} />}
 
-        {showModal && <Modal></Modal>}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={modalImage} alt="" />
+          </Modal>
+        )}
       </div>
     );
   }
